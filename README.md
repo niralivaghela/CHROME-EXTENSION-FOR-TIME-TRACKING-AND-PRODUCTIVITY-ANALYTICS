@@ -120,4 +120,10 @@ Open `debug-test.html` and run:
 ✅ Dashboard showing real-time data  
 ✅ Debug tests passing  
 
-Ready for submission! 🚀
+<img width="580" height="721" alt="Image" src="https://github.com/user-attachments/assets/915ca6c3-4578-4cb9-8938-8b50a8b3f3d3" />
+<img width="1645" height="875" alt="Image" src="https://github.com/user-attachments/assets/66cf6aeb-3a03-4d64-bafb-bee7920d89f6" />
+<img width="813" height="900" alt="Image" src="https://github.com/user-attachments/assets/1ba5877c-2f45-474b-bc2e-19e716f7e2f6" />
+<img width="1507" height="445" alt="Image" src="https://github.com/user-attachments/assets/e8177e7a-259d-452b-8888-12a666b2c682" />
+<img width="1057" height="880" alt="Image" src="https://github.com/user-attachments/assets/20d99dbd-c735-4942-86bc-3ebc663e8890" />
+<img width="754" height="872" alt="Image" src="https://github.com/user-attachments/assets/77862599-fa2e-4233-bef1-fe5fd132c9fa" />
+<img width="751" height="607" alt="Image" src="https://github.com/user-attachments/assets/65c8489a-6ddc-4a84-86be-6e17a3a53604" />
