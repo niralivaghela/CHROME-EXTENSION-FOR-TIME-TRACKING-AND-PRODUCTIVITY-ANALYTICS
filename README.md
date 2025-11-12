@@ -1,5 +1,18 @@
 # Time Tracker Productivity System
 
+COMPANY : CODTECH IT SOLUTIONS
+
+NAME : VAGHELA NIRALI JAGDISHBHAI
+
+INTERN ID : CT06DR1068
+
+DOMAIN : FULL STACK WEB DEVLOPMENT
+
+DURATION : 6 WEEKS
+
+MENTOR : NEELA SANTOSH
+
+
 A complete productivity tracking system with Chrome extension, backend API, and dashboard.
 
 ## 🚀 Quick Start
