@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔍 Debug Test - Time Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Time Tracker Debug Test</h1>
+        <p>This page helps you test if your time tracking system is working properly.</p>
+        
+        <div class="test-section">
+            <h3>1. Backend Connection Test</h3>
+            <button onclick="testBackend()">Test Backend</button>
+            <div id="backend-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Database Test</h3>
+            <button onclick="testDatabase()">Check Database</button>
+            <div id="database-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Recent Activity Test</h3>
+            <button onclick="testActivity()">Check Recent Activity</button>
+            <div id="activity-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Manual Data Insert</h3>
+            <button onclick="insertTestData()">Insert Test Data</button>
+            <div id="insert-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. Extension Status</h3>
+            <button onclick="checkExtension()">Check Extension</button>
+            <div id="extension-result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testBackend() {
+            const result = document.getElementById('backend-result');
+            result.innerHTML = '<p>Testing backend connection...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const data = await response.json();
+                
+                if (data.status === 'OK') {
+                    result.innerHTML = '<div class="success">✅ Backend is running successfully!</div>';
+                } else {
+                    result.innerHTML = '<div class="error">❌ Backend responded but status is not OK</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Backend connection failed: ${error.message}<br><br>Make sure to run: <code>cd backend && npm start</code></div>`;
+            }
+        }
+        
+        let currentUserId = 'default_user';
+        
+        async function testDatabase() {
+            const result = document.getElementById('database-result');
+            result.innerHTML = '<p>Testing database connection...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/activity/user');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUserId = data.userId;
+                    result.innerHTML = `<div class="success">✅ Database connection working!<br>User ID: ${data.userId}</div>`;
+                } else {
+                    result.innerHTML = '<div class="error">❌ Database connection failed</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Database test failed: ${error.message}</div>`;
+            }
+        }
+        
+        async function testActivity() {
+            const result = document.getElementById('activity-result');
+            result.innerHTML = '<p>Checking recent activity...</p>';
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/activity/recent/${currentUserId}`);
+                
+                if (response.ok) {
+                    const activities = await response.json();
+                    
+                    if (activities.length > 0) {
+                        result.innerHTML = `
+                            <div class="success">✅ Found ${activities.length} activities!</div>
+                            <h4>Recent Activities:</h4>
+                            <pre>${JSON.stringify(activities.slice(0, 3), null, 2)}</pre>
+                        `;
+                    } else {
+                        result.innerHTML = '<div class="info">ℹ️ No activities found yet. Try inserting test data first.</div>';
+                    }
+                } else {
+                    result.innerHTML = '<div class="error">❌ Failed to fetch activities</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Activity test failed: ${error.message}</div>`;
+            }
+        }
+        
+        async function insertTestData() {
+            const result = document.getElementById('insert-result');
+            result.innerHTML = '<p>Inserting test data...</p>';
+            
+            const testData = {
+                userId: currentUserId,
+                domain: 'github.com',
+                url: 'https://github.com',
+                title: 'GitHub',
+                timeSpent: 300000, // 5 minutes
+                category: 'productive',
+                focusScore: 85,
+                metadata: {
+                    distractions: 0,
+                    keystrokes: 150,
+                    mouseMovements: 50,
+                    startTime: Date.now() - 300000,
+                    endTime: Date.now()
+                }
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/activity/advanced', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `
+                        <div class="success">✅ Test data inserted successfully!</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    const errorText = await response.text();
+                    result.innerHTML = `<div class="error">❌ Failed to insert test data: ${errorText}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Insert test failed: ${error.message}</div>`;
+            }
+        }
+        
+        function checkExtension() {
+            const result = document.getElementById('extension-result');
+            
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                result.innerHTML = `
+                    <div class="success">✅ Chrome extension API is available</div>
+                    <p>Extension ID: ${chrome.runtime.id || 'Unknown'}</p>
+                    <p><strong>Next steps:</strong></p>
+                    <ul>
+                        <li>Make sure your extension is loaded in Chrome</li>
+                        <li>Visit YouTube, GitHub, or other websites</li>
+                        <li>Check the extension popup for activity</li>
+                        <li>Refresh the dashboard to see data</li>
+                    </ul>
+                `;
+            } else {
+                result.innerHTML = `
+                    <div class="info">ℹ️ Chrome extension API not available (normal for web pages)</div>
+                    <p><strong>To test the extension:</strong></p>
+                    <ul>
+                        <li>Load the extension in Chrome (chrome://extensions/)</li>
+                        <li>Enable Developer mode</li>
+                        <li>Click "Load unpacked" and select the chrome-extension folder</li>
+                        <li>Visit websites and check the extension popup</li>
+                    </ul>
+                `;
+            }
+        }
+        
+        // Auto-run basic tests on page load
+        window.onload = function() {
+            // Add port info
+            document.querySelector('h1').innerHTML += '<br><small style="color: #666;">Backend: http://localhost:3000 | Dashboard: http://localhost:3002</small>';
+            testBackend();
+        };
+    </script>
+</body>
+</html>

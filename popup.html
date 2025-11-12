@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      width: 420px; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffeef8 0%, #fff0f5 50%, #ffe4e6 100%);
+      color: #2d1b2e;
+    }
+    
+    .header { 
+      background: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(236, 72, 153, 0.1);
+    }
+    
+    .header h2 {
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, #ec4899, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header p {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .score-section {
+      padding: 20px;
+      background: white;
+      margin: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.08);
+    }
+    
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .score-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: conic-gradient(#ec4899 0deg, #ec4899 var(--score), #f1f5f9 var(--score), #f1f5f9 360deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .score-inner {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .score-value {
+      font-size: 18px;
+      color: #2d1b2e;
+    }
+    
+    .score-grade {
+      font-size: 10px;
+      color: #666;
+    }
+    
+    .score-info {
+      flex: 1;
+      margin-left: 20px;
+    }
+    
+    .score-info h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    .score-breakdown {
+      font-size: 11px;
+      color: #666;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 15px;
+    }
+    
+    .metric-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(236, 72, 153, 0.06);
+      border-top: 3px solid #ec4899;
+    }
+    
+    .metric-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2d1b2e;
+      margin-bottom: 5px;
+    }
+    
+    .metric-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .current-session {
+      margin: 15px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(236, 72, 153, 0.06);
+    }
+    
+    .session-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .session-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    .status-active { background: #00C851; }
+    .status-idle { background: #FF9800; }
+    .status-inactive { background: #666; }
+    
+    .session-domain {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .session-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #f1f5f9;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ec4899, #f472b6);
+      transition: width 0.3s ease;
+    }
+    
+    .controls {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #ec4899, #f472b6);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: #2d1b2e;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn.active {
+      background: #10b981;
+      color: white;
+    }
+    
+    .insights {
+      margin: 15px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(236, 72, 153, 0.06);
+    }
+    
+    .insights h4 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #2d1b2e;
+    }
+    
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    .insight-icon {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+    
+    .quick-actions {
+      padding: 15px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .quick-btn {
+      flex: 1;
+      padding: 8px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    
+    .quick-btn:hover {
+      background: #f9fafb;
+      border-color: #ec4899;
+    }
+    
+    .footer {
+      padding: 10px 15px;
+      text-align: center;
+      font-size: 10px;
+      color: #9ca3af;
+      border-top: 1px solid #f3f4f6;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    
+    .error {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 10px;
+      margin: 15px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>ProTracker</h2>
+    <p>Enterprise Productivity Analytics</p>
+  </div>
+
+  <div class="score-section">
+    <div class="score-display">
+      <div class="score-circle" id="scoreCircle">
+        <div class="score-inner">
+          <div class="score-value" id="scoreValue">--</div>
+          <div class="score-grade" id="scoreGrade">--</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <h3 id="scoreTitle">Productivity Score</h3>
+        <div class="score-breakdown" id="scoreBreakdown">
+          Calculating your performance...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-value" id="todayTime">0h 0m</div>
+      <div class="metric-label">Focus Time</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="sessionsCount">0</div>
+      <div class="metric-label">Sessions</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="streakCount">0</div>
+      <div class="metric-label">Day Streak</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" id="efficiencyScore">0%</div>
+      <div class="metric-label">Efficiency</div>
+    </div>
+  </div>
+
+  <div class="current-session">
+    <div class="session-header">
+      <div class="session-status" id="sessionStatus"></div>
+      <div class="session-domain" id="sessionDomain">No active session</div>
+    </div>
+    <div class="session-details">
+      <span>Duration: <span id="sessionDuration">0m</span></span>
+      <span>Focus: <span id="sessionFocus">100%</span></span>
+      <span>Activity: <span id="sessionActivity">--</span></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="sessionProgress"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-secondary" id="focusModeBtn">🎯 Focus Mode</button>
+    <button class="btn btn-secondary" id="breakBtn">⏰ Breaks</button>
+    <button class="btn btn-secondary" id="pomodoroBtn">🍅 Pomodoro</button>
+    <button class="btn btn-secondary" id="deepWorkBtn">🧠 Deep Work</button>
+  </div>
+
+  <div class="insights">
+    <h4>💡 Smart Insights</h4>
+    <div id="insightsList">
+      <div class="loading">Analyzing your productivity...</div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <div class="quick-btn" id="dashboardBtn">📊 Dashboard</div>
+    <div class="quick-btn" id="settingsBtn">⚙️ Settings</div>
+    <div class="quick-btn" id="reportsBtn">📈 Reports</div>
+  </div>
+
+  <div class="footer">
+    ProTracker v2.0 - Enterprise Edition
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

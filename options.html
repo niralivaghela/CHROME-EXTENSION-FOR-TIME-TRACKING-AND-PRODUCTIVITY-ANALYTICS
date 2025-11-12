@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ProTracker Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffeef8, #ffe4e6);
+      margin: 0;
+      padding: 20px;
+      color: #2d1b2e;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(236, 72, 153, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #ec4899, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .setting-group {
+      margin-bottom: 25px;
+      padding: 20px;
+      border: 1px solid #f3f4f6;
+      border-radius: 10px;
+    }
+    .setting-group h3 {
+      margin-bottom: 15px;
+      color: #2d1b2e;
+    }
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background: #ccc;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle.active {
+      background: #ec4899;
+    }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: left 0.3s;
+    }
+    .toggle.active::after {
+      left: 28px;
+    }
+    .btn {
+      background: linear-gradient(135deg, #ec4899, #f472b6);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 10px 5px;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .success {
+      background: #fdf2f8;
+      color: #be185d;
+      border: 2px solid #f9a8d4;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 ProTracker Settings</h1>
+    
+    <div class="setting-group">
+      <h3>🎯 Focus & Productivity</h3>
+      <div class="setting-item">
+        <span>Focus Mode</span>
+        <div class="toggle" id="focusMode"></div>
+      </div>
+      <div class="setting-item">
+        <span>Block Distracting Sites</span>
+        <div class="toggle" id="blockDistractions"></div>
+      </div>
+      <div class="setting-item">
+        <span>Deep Work Mode</span>
+        <div class="toggle" id="deepWorkMode"></div>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>⏰ Time Management</h3>
+      <div class="setting-item">
+        <span>Break Reminders</span>
+        <div class="toggle" id="breakReminders"></div>
+      </div>
+      <div class="setting-item">
+        <span>Pomodoro Timer</span>
+        <div class="toggle" id="pomodoroTimer"></div>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>📊 Tracking</h3>
+      <div class="setting-item">
+        <span>Track Mouse Movement</span>
+        <div class="toggle" id="trackMouseMovement"></div>
+      </div>
+      <div class="setting-item">
+        <span>Track Keystrokes</span>
+        <div class="toggle" id="trackKeystrokes"></div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <button class="btn" id="saveBtn">💾 Save Settings</button>
+      <button class="btn" id="resetBtn">🔄 Reset to Default</button>
+    </div>
+
+    <div id="status" class="status success" style="display: none;">
+      Settings saved successfully!
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
